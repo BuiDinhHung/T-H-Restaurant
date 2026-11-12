@@ -13,14 +13,14 @@ export default function Visit({ dict }: { dict: Dict }) {
         <p className="eyebrow reveal text-accent">{v.eyebrow}</p>
         <h2 className="display reveal mt-6 text-[clamp(2.6rem,6vw,4.8rem)] text-navy-900">{v.title}</h2>
 
-        <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-12">
-          {/* Location card */}
-          <div className="reveal flex flex-col lg:col-span-5">
-            <article className="overflow-hidden border border-gold-700/30 bg-white/50">
+        <div className="mt-14 grid gap-6 lg:mt-20 lg:grid-cols-12 lg:gap-8">
+          {/* Left: location card */}
+          <div className="reveal lg:col-span-5">
+            <article className="flex h-full flex-col overflow-hidden border border-gold-700/30 bg-white/50">
               <div className="reveal-img img-zoom aspect-[16/10] overflow-hidden">
                 <Img name="terrace-view" alt={dict.alt.terraceView} sizes="(min-width:1024px) 34vw, 100vw" className="h-full w-full object-cover object-[50%_45%]" />
               </div>
-              <div className="p-7 sm:p-10">
+              <div className="flex flex-1 flex-col p-7 sm:p-10">
               <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
                 <MapPin className="size-3.5" strokeWidth={1.75} /> {address.city} · {v.country}
               </p>
@@ -33,7 +33,7 @@ export default function Visit({ dict }: { dict: Dict }) {
                 {v.country}
               </address>
               <p className="mt-4 border-l-2 border-gold-500 pl-4 text-[13px] text-ink-soft">{v.border}</p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap gap-3 lg:mt-auto lg:pt-8">
                 <a href={maps.share} target="_blank" rel="noopener" className="btn-ink">
                   {v.openMaps} <ArrowUpRight className="size-4" strokeWidth={1.5} />
                 </a>
@@ -43,57 +43,59 @@ export default function Visit({ dict }: { dict: Dict }) {
               </div>
               </div>
             </article>
-
-            <div className="mt-10 grid gap-10 sm:grid-cols-2">
-              <div>
-                <h3 className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
-                  <Clock className="size-3.5" strokeWidth={1.75} /> {v.hoursTitle}
-                </h3>
-                <p className="mt-4 text-sm text-ink-soft">{v.days}</p>
-                <p className="font-display text-[2rem] leading-tight font-semibold text-navy-900 tabular-nums">
-                  {hours.open} – {hours.close}
-                </p>
-                <p className="mt-1 text-sm text-ink-soft">
-                  {v.kitchen} {hours.kitchenOpen} – {hours.kitchenClose}
-                </p>
-                <p className="mt-4 inline-block rounded-full bg-navy-900 px-3 py-1 text-[11px] tracking-wide text-gold-200">{v.daily}</p>
-              </div>
-              <div>
-                <h3 className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
-                  <Phone className="size-3.5" strokeWidth={1.75} /> {v.contactTitle}
-                </h3>
-                <ul className="mt-4 space-y-3">
-                  {phones.map((p) => (
-                    <li key={p.href}>
-                      <a href={p.href} className="link-underline font-display text-[1.45rem] font-semibold text-navy-900 tabular-nums">
-                        {p.display}
-                      </a>
-                      {"messengers" in p && <p className="text-xs text-ink-soft">{p.messengers}</p>}
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-3 text-xs text-ink-soft">Facebook: {business.facebookName}</p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  <a href={phones[0].href} className="btn-ink h-10 px-5">
-                    <Phone className="size-3.5" strokeWidth={1.75} /> {v.call}
-                  </a>
-                  <a href={business.whatsapp} target="_blank" rel="noopener" className="btn-line-ink h-10 px-5">
-                    <MessageCircle className="size-3.5" strokeWidth={1.75} /> WhatsApp
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
 
-          <div className="reveal min-h-[440px] overflow-hidden border border-gold-700/30 lg:col-span-7" style={{ ["--d" as string]: "120ms" }}>
-            <iframe
-              title={`Google Maps – ${business.name}`}
-              src={business.maps.embed}
-              className="block h-full min-h-[440px] w-full border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
-            />
+          {/* Right: compact map, then opening hours & contact */}
+          <div className="reveal flex flex-col gap-6 lg:col-span-7 lg:gap-8" style={{ ["--d" as string]: "120ms" }}>
+            <div className="h-[280px] overflow-hidden border border-gold-700/30 sm:h-[320px] lg:h-auto lg:min-h-[300px] lg:flex-1">
+              <iframe
+                title={`Google Maps – ${business.name}`}
+                src={business.maps.embed}
+                className="block h-full w-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+            </div>
+              <div className="grid gap-8 border border-gold-700/30 bg-white/50 p-7 sm:grid-cols-2 sm:p-8">
+                <div>
+                  <h3 className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
+                    <Clock className="size-3.5" strokeWidth={1.75} /> {v.hoursTitle}
+                  </h3>
+                  <p className="mt-4 text-sm text-ink-soft">{v.days}</p>
+                  <p className="font-display text-[2rem] leading-tight font-semibold text-navy-900 tabular-nums">
+                    {hours.open} – {hours.close}
+                  </p>
+                  <p className="mt-1 text-sm text-ink-soft">
+                    {v.kitchen} {hours.kitchenOpen} – {hours.kitchenClose}
+                  </p>
+                  <p className="mt-4 inline-block rounded-full bg-navy-900 px-3 py-1 text-[11px] tracking-wide text-gold-200">{v.daily}</p>
+                </div>
+                <div>
+                  <h3 className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
+                    <Phone className="size-3.5" strokeWidth={1.75} /> {v.contactTitle}
+                  </h3>
+                  <ul className="mt-4 space-y-3">
+                    {phones.map((p) => (
+                      <li key={p.href}>
+                        <a href={p.href} className="link-underline font-display text-[1.45rem] font-semibold text-navy-900 tabular-nums">
+                          {p.display}
+                        </a>
+                        {"messengers" in p && <p className="text-xs text-ink-soft">{p.messengers}</p>}
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-xs text-ink-soft">Facebook: {business.facebookName}</p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <a href={phones[0].href} className="btn-ink h-10 px-5">
+                      <Phone className="size-3.5" strokeWidth={1.75} /> {v.call}
+                    </a>
+                    <a href={business.whatsapp} target="_blank" rel="noopener" className="btn-line-ink h-10 px-5">
+                      <MessageCircle className="size-3.5" strokeWidth={1.75} /> WhatsApp
+                    </a>
+                  </div>
+                </div>
+              </div>
           </div>
         </div>
       </div>
