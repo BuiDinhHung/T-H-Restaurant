@@ -147,5 +147,164 @@
 /* Hero background clip: softly blurred under the navy overlay */
 .hero-bg video {
   filter: blur(1.5px) saturate(1.1);
-  transform: scale(1.04);
+}
+
+/* ───────────────────────── Motion layer ───────────────────────── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(36px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes letter-in {
+  from { opacity: 0; transform: translateY(0.45em) rotateX(-70deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes ken-burns {
+  from { transform: scale(1.04); }
+  to { transform: scale(1.16) translate3d(-1.5%, -1%, 0); }
+}
+@keyframes line-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes marquee {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes shine {
+  from { transform: translateX(-120%) skewX(-20deg); }
+  to { transform: translateX(260%) skewX(-20deg); }
+}
+@keyframes tab-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(8px); opacity: 1; }
+}
+
+/* Hero entrance: elements rise in sequence (--i = order) */
+.intro {
+  opacity: 0;
+  animation: fade-up 1.2s var(--ease-lux) forwards;
+  animation-delay: calc(var(--i, 0) * 140ms + 150ms);
+}
+.letters {
+  perspective: 600px;
+}
+.letters > span {
+  display: inline-block;
+  opacity: 0;
+  transform-origin: 50% 100%;
+  animation: letter-in 1s var(--ease-lux) forwards;
+  animation-delay: calc(var(--l, 0) * 70ms + 250ms);
+}
+.hero-bg video {
+  animation: ken-burns 22s ease-in-out infinite alternate;
+}
+.scroll-cue {
+  animation: bob 2.4s ease-in-out infinite;
+}
+
+/* Gold shine sweeping across primary buttons */
+.btn-gold {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-gold::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-120%) skewX(-20deg);
+  pointer-events: none;
+}
+.btn-gold:hover::after {
+  animation: shine 0.9s var(--ease-lux);
+}
+
+/* Eyebrow line draws in when revealed */
+.reveal.eyebrow::before,
+.reveal .eyebrow::before {
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1s var(--ease-lux) 0.2s;
+}
+.reveal.eyebrow[data-shown="true"]::before,
+.reveal[data-shown="true"] .eyebrow::before {
+  transform: scaleX(1);
+}
+
+/* Images: curtain wipe + settle */
+.reveal-img {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 1.3s var(--ease-lux);
+  transition-delay: var(--d, 0ms);
+}
+.reveal-img > img,
+.reveal-img > video {
+  transform: scale(1.18);
+  transition: transform 1.8s var(--ease-lux);
+  transition-delay: var(--d, 0ms);
+}
+.reveal-img[data-shown="true"] {
+  clip-path: inset(0 0 0 0);
+}
+.reveal-img[data-shown="true"] > img,
+.reveal-img[data-shown="true"] > video {
+  transform: none;
+}
+.img-zoom.reveal-img[data-shown="true"]:hover > img,
+.group:hover .img-zoom.reveal-img[data-shown="true"] > img,
+.group:hover .img-zoom.reveal-img[data-shown="true"] > video {
+  transform: scale(1.06);
+}
+
+/* Infinite marquee band */
+.marquee-track {
+  animation: marquee 40s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+.tab-in > * {
+  animation: tab-in 0.7s var(--ease-lux) both;
+}
+.tab-in > *:nth-child(2) { animation-delay: 80ms; }
+.tab-in > *:nth-child(3) { animation-delay: 160ms; }
+.anim-zoom { animation: zoom-in 0.5s var(--ease-lux) both; }
+.anim-fade { animation: fade-in 0.4s ease both; }
+
+/* Card lift with gold glow */
+.lift {
+  transition: transform 0.7s var(--ease-lux), box-shadow 0.7s var(--ease-lux);
+}
+.lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 50px -20px rgba(220, 176, 82, 0.45);
+}
+.lift.reveal-img {
+  transition:
+    clip-path 1.3s var(--ease-lux) var(--d, 0ms),
+    transform 0.7s var(--ease-lux),
+    box-shadow 0.7s var(--ease-lux);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro, .letters > span { opacity: 1; animation: none; }
+  .hero-bg video, .scroll-cue, .marquee-track, .tab-in > *, .anim-zoom, .anim-fade { animation: none; }
+  .reveal-img { clip-path: none; transition: none; }
+  .reveal-img > img, .reveal-img > video { transform: none; transition: none; }
+  .btn-gold:hover::after { animation: none; }
+  .lift, .lift:hover { transform: none; transition: none; }
 }

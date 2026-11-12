@@ -33,7 +33,7 @@ export default function Food({ dict }: { dict: Dict }) {
         <div className="mt-14 grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
           {TILES.map((t, i) => (
             <a key={t.name} href={`#menu-${t.section}`} className="reveal group block" style={{ ["--d" as string]: `${i * 90}ms` }}>
-              <div className="img-zoom aspect-[3/4] overflow-hidden rounded-md bg-navy-800">
+              <div className="lift reveal-img img-zoom aspect-[3/4] overflow-hidden rounded-md bg-navy-800" style={{ ["--d" as string]: `${i * 110}ms` }}>
                 {t.kind === "photo" ? (
                   <Img name={t.name} alt={dict.alt.dish} sizes="(min-width:1024px) 24vw, 50vw" className="h-full w-full object-cover" />
                 ) : (

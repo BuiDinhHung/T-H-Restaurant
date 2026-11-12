@@ -8,10 +8,15 @@ import type { Dict, LocaleKey } from "@/lib/i18n";
 
 export default function Header({ locale, dict }: { locale: LocaleKey; dict: Dict }) {
   const [solid, setSolid] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const on = () => setSolid(window.scrollY > 40);
+    const on = () => {
+      setSolid(window.scrollY > 40);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? window.scrollY / max : 0);
+    };
     on();
     window.addEventListener("scroll", on, { passive: true });
     return () => window.removeEventListener("scroll", on);
@@ -36,6 +41,7 @@ export default function Header({ locale, dict }: { locale: LocaleKey; dict: Dict
           solid ? "border-b border-gold-400/15 bg-navy-950/90 backdrop-blur-xl" : "border-b border-transparent bg-transparent"
         }`}
       >
+        <span aria-hidden className="absolute bottom-[-1px] left-0 h-[2px] w-full origin-left bg-gradient-to-r from-gold-500 via-gold-300 to-accent-soft" style={{ transform: `scaleX(${progress})` }} />
         <div className="container-lux flex h-[72px] items-center gap-3 sm:gap-6 lg:h-20">
           <a href="#top" className="flex items-center gap-3" aria-label={business.name}>
             {/* eslint-disable-next-line @next/next/no-img-element */}

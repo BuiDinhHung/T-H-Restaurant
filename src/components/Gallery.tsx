@@ -56,8 +56,8 @@ export default function Gallery({ dict }: { dict: Dict }) {
               key={t.name}
               onClick={() => setIdx(i)}
               aria-label={`${g.open}: ${dict.alt[t.altKey]}`}
-              className="reveal group img-zoom relative block aspect-[3/4] overflow-hidden rounded-md bg-navy-800"
-              style={{ ["--d" as string]: `${(i % 4) * 80}ms` }}
+              className="reveal-img lift group img-zoom relative block aspect-[3/4] overflow-hidden rounded-md bg-navy-800"
+              style={{ ["--d" as string]: `${(i % 4) * 110}ms` }}
             >
               {t.kind === "photo" ? (
                 <Img name={t.name} alt={dict.alt[t.altKey]} sizes="(min-width:1024px) 24vw, 50vw" className="h-full w-full object-cover" />

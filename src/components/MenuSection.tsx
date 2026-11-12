@@ -211,7 +211,9 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
                   </div>
                 </>
               ) : (
-                <SectionBlock key={current.id} s={current} spicy={m.spicy} />
+                <div key={current.id} className="tab-in">
+                  <SectionBlock s={current} spicy={m.spicy} />
+                </div>
               )}
 
               <div className="mt-6 flex flex-col items-center gap-4 border-t border-gold-500/30 pt-8 text-center">

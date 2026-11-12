@@ -45,7 +45,7 @@ export default function Lightbox({ items, index, onChange, closeLabel }: Props) 
       role="dialog"
       aria-modal="true"
       aria-label={it.alt}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-navy-950/96 p-4 backdrop-blur-sm sm:p-10"
+      className="anim-fade fixed inset-0 z-[100] flex items-center justify-center bg-navy-950/96 p-4 backdrop-blur-sm sm:p-10"
       onClick={(e) => e.target === e.currentTarget && onChange(null)}
       onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
       onTouchEnd={(e) => {
@@ -55,7 +55,7 @@ export default function Lightbox({ items, index, onChange, closeLabel }: Props) 
         touchX.current = null;
       }}
     >
-      <figure className="flex max-h-full max-w-full flex-col items-center">
+      <figure key={index} className="anim-zoom flex max-h-full max-w-full flex-col items-center">
         {it.type === "video" ? (
           <video
             key={it.src}

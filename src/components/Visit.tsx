@@ -17,7 +17,7 @@ export default function Visit({ dict }: { dict: Dict }) {
           {/* Location card */}
           <div className="reveal flex flex-col lg:col-span-5">
             <article className="overflow-hidden border border-gold-700/30 bg-white/50">
-              <div className="aspect-[16/10] overflow-hidden">
+              <div className="reveal-img img-zoom aspect-[16/10] overflow-hidden">
                 <Img name="terrace-view" alt={dict.alt.terraceView} sizes="(min-width:1024px) 34vw, 100vw" className="h-full w-full object-cover object-[50%_45%]" />
               </div>
               <div className="p-7 sm:p-10">
