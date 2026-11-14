@@ -1,43 +1,65 @@
 "use client";
 import { useState } from "react";
-import { Expand, Play } from "lucide-react";
+import { ChevronDown, Expand, Play } from "lucide-react";
 import Img from "./Img";
 import LazyVideo from "./LazyVideo";
 import Lightbox, { type LightboxItem } from "./Lightbox";
 import { clip, photo } from "@/lib/media";
 import type { Dict } from "@/lib/i18n";
 
-type Tile = { kind: "photo" | "video"; name: string; altKey: string };
+type Group = "kitchen" | "inside" | "terrace";
+type Tile = { kind: "photo" | "video"; name: string; altKey: string; group: Group };
 
 /**
- * Even 3:4 grid, photos and videos strictly alternating:
- * desktop (4 columns) reads as a checkerboard  P V P V / V P V P,
- * phones (2 columns) as  P V / P V / V P / V P.
+ * Even 3:4 grid mixing photos and clips. The order below is the "All" view
+ * (food, dining room and terrace interleaved); the filter chips show one group.
  */
 const TILES: Tile[] = [
-  { kind: "photo", name: "terrace-umbrellas", altKey: "terraceUmbrellas" },
-  { kind: "video", name: "duck-wok", altKey: "videoDish" },
-  { kind: "photo", name: "interior-bar", altKey: "interiorBar" },
-  { kind: "video", name: "steak", altKey: "videoDish" },
-  { kind: "video", name: "duck-curry", altKey: "videoDish" },
-  { kind: "photo", name: "family-table", altKey: "familyTable" },
-  { kind: "video", name: "prawns", altKey: "videoDish" },
-  { kind: "photo", name: "guests-dining", altKey: "guestsDining" },
-  { kind: "photo", name: "terrace-group", altKey: "terraceGroup" },
-  { kind: "video", name: "sizzling", altKey: "videoDish" },
-  { kind: "photo", name: "guests-table", altKey: "guestsTable" },
-  { kind: "video", name: "pho", altKey: "videoDish" },
+  { kind: "photo", name: "terrace-umbrellas", altKey: "terraceUmbrellas", group: "terrace" },
+  { kind: "video", name: "dining-full", altKey: "videoInside", group: "inside" },
+  { kind: "video", name: "bun-closeup", altKey: "videoDish", group: "kitchen" },
+  { kind: "photo", name: "interior-bar", altKey: "interiorBar", group: "inside" },
+
+  { kind: "video", name: "terrace-crowd", altKey: "videoTerrace", group: "terrace" },
+  { kind: "photo", name: "family-table", altKey: "familyTable", group: "inside" },
+  { kind: "video", name: "duck-wok", altKey: "videoDish", group: "kitchen" },
+  { kind: "video", name: "guests-bun", altKey: "videoInside", group: "inside" },
+
+  { kind: "photo", name: "guests-dining", altKey: "guestsDining", group: "inside" },
+  { kind: "video", name: "prawns", altKey: "videoDish", group: "kitchen" },
+  { kind: "video", name: "dining-room", altKey: "videoInside", group: "inside" },
+  { kind: "photo", name: "terrace-group", altKey: "terraceGroup", group: "terrace" },
+
+  { kind: "video", name: "sizzling", altKey: "videoDish", group: "kitchen" },
+  { kind: "video", name: "terrace-guests", altKey: "videoTerrace", group: "terrace" },
+  { kind: "photo", name: "guests-table", altKey: "guestsTable", group: "inside" },
+  { kind: "video", name: "bun-bowls", altKey: "videoDish", group: "kitchen" },
+
+  { kind: "video", name: "steak", altKey: "videoDish", group: "kitchen" },
+  { kind: "video", name: "interior-walk", altKey: "videoInside", group: "inside" },
+  { kind: "video", name: "duck-curry", altKey: "videoDish", group: "kitchen" },
+  { kind: "video", name: "pho", altKey: "videoDish", group: "kitchen" },
 ];
+
+/** Tiles shown in the "All" view before "Show more" (3 rows on desktop). */
+const INITIAL = 12;
 
 export default function Gallery({ dict }: { dict: Dict }) {
   const g = dict.gallery;
   const [idx, setIdx] = useState<number | null>(null);
+  const [filter, setFilter] = useState<"all" | Group>("all");
+  const [expanded, setExpanded] = useState(false);
 
-  const items: LightboxItem[] = TILES.map((t) =>
+  const filtered = filter === "all" ? TILES : TILES.filter((t) => t.group === filter);
+  const shown = filter === "all" && !expanded ? filtered.slice(0, INITIAL) : filtered;
+
+  const items: LightboxItem[] = filtered.map((t) =>
     t.kind === "photo"
       ? { type: "image", src: photo(t.name).src, srcSet: photo(t.name).srcSet, alt: dict.alt[t.altKey] }
       : { type: "video", src: clip(t.name).src, poster: clip(t.name).still, alt: dict.alt[t.altKey] },
   );
+
+  const chips: ("all" | Group)[] = ["all", "kitchen", "inside", "terrace"];
 
   return (
     <section id="gallery" className="bg-navy-950 py-24 sm:py-32">
@@ -50,14 +72,32 @@ export default function Gallery({ dict }: { dict: Dict }) {
           <p className="reveal max-w-sm text-[15px] leading-[1.85] text-paper/65">{g.text}</p>
         </div>
 
-        <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-          {TILES.map((t, i) => (
+        <div className="reveal mt-10 flex flex-wrap gap-2" role="group" aria-label={g.title}>
+          {chips.map((c) => {
+            const on = c === filter;
+            const n = c === "all" ? TILES.length : TILES.filter((t) => t.group === c).length;
+            return (
+              <button
+                key={c}
+                onClick={() => setFilter(c)}
+                aria-pressed={on}
+                className={`rounded-full border px-4 py-2 text-[12px] font-semibold tracking-[0.08em] transition-colors ${
+                  on ? "border-gold-400 bg-gold-400 text-navy-950" : "border-white/15 text-paper/75 hover:border-gold-400/60 hover:text-gold-200"
+                }`}
+              >
+                {g.filters[c]} <span className={on ? "text-navy-950/60" : "text-paper/40"}>{n}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {shown.map((t, i) => (
             <button
               key={t.name}
               onClick={() => setIdx(i)}
               aria-label={`${g.open}: ${dict.alt[t.altKey]}`}
-              className="reveal-img lift group img-zoom relative block aspect-[3/4] overflow-hidden rounded-md bg-navy-800"
-              style={{ ["--d" as string]: `${(i % 4) * 110}ms` }}
+              className="lift group img-zoom tab-in relative block aspect-[3/4] overflow-hidden rounded-md bg-navy-800"
             >
               {t.kind === "photo" ? (
                 <Img name={t.name} alt={dict.alt[t.altKey]} sizes="(min-width:1024px) 24vw, 50vw" className="h-full w-full object-cover" />
@@ -74,6 +114,14 @@ export default function Gallery({ dict }: { dict: Dict }) {
             </button>
           ))}
         </div>
+
+        {shown.length < filtered.length && (
+          <div className="mt-10 flex justify-center">
+            <button onClick={() => setExpanded(true)} className="btn-line">
+              {g.more} ({filtered.length - shown.length}) <ChevronDown className="size-4" strokeWidth={1.5} />
+            </button>
+          </div>
+        )}
       </div>
 
       <Lightbox items={items} index={idx} onChange={setIdx} closeLabel={dict.nav.close} />

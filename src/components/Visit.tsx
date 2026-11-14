@@ -1,6 +1,7 @@
 "use client";
 import { ArrowUpRight, Clock, MapPin, MessageCircle, Navigation, Phone } from "lucide-react";
-import Img from "./Img";
+import LazyVideo from "./LazyVideo";
+import { clip } from "@/lib/media";
 import { business } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
 
@@ -17,8 +18,9 @@ export default function Visit({ dict }: { dict: Dict }) {
           {/* Left: location card */}
           <div className="reveal lg:col-span-5">
             <article className="flex h-full flex-col overflow-hidden border border-gold-700/30 bg-white/50">
-              <div className="reveal-img img-zoom aspect-[16/10] overflow-hidden">
-                <Img name="terrace-view" alt={dict.alt.terraceView} sizes="(min-width:1024px) 34vw, 100vw" className="h-full w-full object-cover object-[50%_45%]" />
+              {/* Short clip: car park and the entrance under the T&H sign — what guests see on arrival */}
+              <div className="relative aspect-[4/3] overflow-hidden bg-navy-900">
+                <LazyVideo src={clip("exterior").src} poster={clip("exterior").still} label={dict.alt.videoExterior} className="h-full w-full object-cover object-[50%_40%]" />
               </div>
               <div className="flex flex-1 flex-col p-7 sm:p-10">
               <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
@@ -62,7 +64,9 @@ export default function Visit({ dict }: { dict: Dict }) {
                   <h3 className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
                     <Clock className="size-3.5" strokeWidth={1.75} /> {v.hoursTitle}
                   </h3>
-                  <p className="mt-4 text-sm text-ink-soft">{v.days}</p>
+                  <p className="mt-4 text-sm text-ink-soft">
+                    {v.days} <span className="text-ink-soft/70">({v.daysShort})</span>
+                  </p>
                   <p className="font-display text-[2rem] leading-tight font-semibold text-navy-900 tabular-nums">
                     {hours.open} – {hours.close}
                   </p>

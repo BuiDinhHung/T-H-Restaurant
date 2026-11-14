@@ -22,7 +22,7 @@ export default async function Page({ params }: { params: Promise<{ locale: strin
   if (!isLocale(locale)) notFound();
   const dict = getDict(locale);
   const sectionWords = menus[localeConfig[locale].menu].sections.map((s) => s.title);
-  const infoWords = ["T&H Restaurant", "New Asian", "Horní Folmava", `${dict.hero.openDaily} ${business.hours.open} – ${business.hours.close}`, dict.food.captions[1]];
+  const infoWords = ["T&H Restaurant", "New Asian", "Horní Folmava", `${dict.visit.daysShort} ${business.hours.open} – ${business.hours.close}`, `${dict.visit.kitchen} ${business.hours.kitchenOpen} – ${business.hours.kitchenClose}`, dict.food.captions[1]];
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:rounded-full focus:bg-gold-400 focus:px-4 focus:py-2 focus:text-navy-950">

@@ -73,7 +73,10 @@ export default function Hero({ dict }: { dict: Dict }) {
               <Clock className="size-4 text-gold-400" strokeWidth={1.5} />
               <dt className="sr-only">{dict.visit.hoursTitle}</dt>
               <dd>
-                {dict.hero.openDaily} · {hours.open} – {hours.close}
+                {dict.visit.daysShort}: {hours.open} – {hours.close}{" "}
+                <span className="text-paper/55">
+                  ({dict.visit.kitchen} {hours.kitchenOpen} – {hours.kitchenClose})
+                </span>
               </dd>
             </div>
             <div className="flex items-center gap-2.5">

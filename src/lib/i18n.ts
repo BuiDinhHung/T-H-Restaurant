@@ -30,8 +30,9 @@ export type Dict = {
     empty: string;
     original: string;
     spicy: string;
+    count: string; // {n} = number of items
   };
-  gallery: { eyebrow: string; title: string; text: string; video: string; open: string };
+  gallery: { eyebrow: string; title: string; text: string; video: string; open: string; more: string; filters: { all: string; kitchen: string; inside: string; terrace: string } };
   visit: {
     eyebrow: string;
     title: string;
@@ -43,6 +44,7 @@ export type Dict = {
     mapLoad: string;
     hoursTitle: string;
     days: string;
+    daysShort: string;
     kitchen: string;
     daily: string;
     contactTitle: string;
@@ -92,6 +94,7 @@ const de: Dict = {
     empty: "Keine Treffer.",
     original: "Original-Speisekarte",
     spicy: "Scharf",
+    count: "{n} Gerichte & Getränke · Nr. 1–{n}",
   },
   gallery: {
     eyebrow: "Einblicke",
@@ -99,6 +102,8 @@ const de: Dict = {
     text: "Echte Momente aus unserem Restaurant – von der Terrasse bis an den Tisch.",
     video: "Video",
     open: "Vergrößern",
+    more: "Mehr anzeigen",
+    filters: { all: "Alle", kitchen: "Küche", inside: "Gaststube", terrace: "Terrasse" },
   },
   visit: {
     eyebrow: "Besuchen Sie uns",
@@ -111,6 +116,7 @@ const de: Dict = {
     mapLoad: "Karte laden",
     hoursTitle: "Öffnungszeiten",
     days: "Montag – Sonntag",
+    daysShort: "Mo – So",
     kitchen: "Küche",
     daily: "Täglich geöffnet – ohne Ruhetag",
     contactTitle: "Kontakt & Reservierung",
@@ -134,6 +140,9 @@ const de: Dict = {
     familyTable: "Familie mit vielen Gerichten am Tisch",
     guestsTable: "Zwei Gäste am Tisch in der Gaststube",
     videoDish: "Video: Gericht aus unserer Küche",
+    videoInside: "Video: Gäste in der vollen Gaststube",
+    videoTerrace: "Video: Gäste auf der Terrasse unter Sonnenschirmen",
+    videoExterior: "Video: Eingang des T&H Restaurant und Parkplatz",
   },
 };
 
@@ -176,6 +185,7 @@ const cs: Dict = {
     empty: "Nic nenalezeno.",
     original: "Originální lístek",
     spicy: "Pálivé",
+    count: "{n} jídel a nápojů · č. 1–{n}",
   },
   gallery: {
     eyebrow: "Nahlédněte k nám",
@@ -183,6 +193,8 @@ const cs: Dict = {
     text: "Skutečné okamžiky z naší restaurace – od terasy až ke stolu.",
     video: "Video",
     open: "Zvětšit",
+    more: "Zobrazit více",
+    filters: { all: "Vše", kitchen: "Kuchyně", inside: "Lokál", terrace: "Terasa" },
   },
   visit: {
     eyebrow: "Navštivte nás",
@@ -195,6 +207,7 @@ const cs: Dict = {
     mapLoad: "Načíst mapu",
     hoursTitle: "Otevírací doba",
     days: "Pondělí – Neděle",
+    daysShort: "Po – Ne",
     kitchen: "Kuchyně",
     daily: "Otevřeno denně – bez zavíracího dne",
     contactTitle: "Kontakt a rezervace",
@@ -218,6 +231,9 @@ const cs: Dict = {
     familyTable: "Rodina s mnoha pokrmy na stole",
     guestsTable: "Dva hosté u stolu v lokále",
     videoDish: "Video: jídlo z naší kuchyně",
+    videoInside: "Video: hosté v plném lokále",
+    videoTerrace: "Video: hosté na terase pod slunečníky",
+    videoExterior: "Video: vchod do T&H Restaurant a parkoviště",
   },
 };
 

@@ -7,7 +7,8 @@ import { localeConfig, type Dict, type LocaleKey } from "@/lib/i18n";
 
 /** Printed page on which each section starts (same layout in both editions). */
 const START_PAGE: Record<string, number> = { s1: 0, s2: 2, s3: 3, s4: 3, s5: 4, s6: 9, s7: 10, s8: 10, s9: 11 };
-const DEFAULT_TAB = "s5";
+/** Space kept above a section when jumping to it (site header + sticky menu toolbar). */
+const SCROLL_OFFSET = 230;
 
 const norm = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
 
@@ -93,25 +94,55 @@ function SectionBlock({ s, spicy, heading = true }: { s: Section; spicy: string;
 export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict: Dict }) {
   const menu = menus[localeConfig[locale].menu];
   const m = dict.menu;
-  const [tab, setTab] = useState(DEFAULT_TAB);
+  const [tab, setTab] = useState(menu.sections[0].id);
   const [q, setQ] = useState("");
   const [viewer, setViewer] = useState<number | null>(null);
   const top = useRef<HTMLDivElement>(null);
 
-  // Deep links like #menu-s7 (used by the food tiles) open that section
+  const jump = (id: string) => {
+    const el = document.getElementById(`menu-${id}`);
+    if (!el) return;
+    setTab(id);
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET, behavior: "smooth" });
+  };
+
+  // Deep links like #menu-s7 (used by the food tiles) scroll to that section of the full list
   useEffect(() => {
     const apply = () => {
       const m = window.location.hash.match(/^#menu-(s\d)$/);
       if (m && menu.sections.some((s) => s.id === m[1])) {
-        setTab(m[1]);
         setQ("");
-        requestAnimationFrame(() => document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" }));
+        requestAnimationFrame(() => jump(m[1]));
       }
     };
     apply();
     window.addEventListener("hashchange", apply);
     return () => window.removeEventListener("hashchange", apply);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu]);
+
+  // Scroll-spy: highlight the tab of the section currently under the toolbar
+  useEffect(() => {
+    if (q) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        let cur = menu.sections[0].id;
+        for (const s of menu.sections) {
+          const el = document.getElementById(`menu-${s.id}`);
+          if (el && el.getBoundingClientRect().top - SCROLL_OFFSET - 40 <= 0) cur = s.id;
+        }
+        setTab(cur);
+      });
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [menu, q]);
 
   // Keep the active tab visible in the horizontally scrolling tab bar
   useEffect(() => {
@@ -121,10 +152,10 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
   }, [tab]);
 
   const pick = (id: string) => {
-    setTab(id);
-    setQ("");
-    const y = (top.current?.getBoundingClientRect().top ?? 0) + window.scrollY - 90;
-    if (window.scrollY > y) window.scrollTo({ top: y, behavior: "smooth" });
+    if (q) {
+      setQ("");
+      requestAnimationFrame(() => requestAnimationFrame(() => jump(id)));
+    } else jump(id);
   };
 
   const results = useMemo(() => {
@@ -141,6 +172,7 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
   }, [q, menu]);
   const count = results?.reduce((a, s) => a + s.categories.reduce((b, c) => b + c.items.length, 0), 0) ?? 0;
   const current = menu.sections.find((s) => s.id === tab) ?? menu.sections[0];
+  const total = menu.sections.reduce((a, s) => a + s.categories.reduce((b, c) => b + c.items.length, 0), 0);
 
   return (
     <section id="menu" className="relative bg-ivory-100 py-24 text-ink sm:py-32">
@@ -151,6 +183,7 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
           <p className="reveal mt-5 text-[13px] tracking-wide text-ink-soft">
             <strong className="font-semibold text-navy-900">{m.edition}</strong> <span className="mx-2 text-gold-700">·</span> {m.currency}
           </p>
+          <p className="reveal mt-2 text-[12px] font-semibold tracking-[0.16em] text-gold-700 uppercase">{m.count.replaceAll("{n}", String(total))}</p>
         </header>
 
         <div ref={top} className="relative mx-auto mt-12 max-w-[1180px] border border-gold-500/50 bg-ivory-50 p-1.5 shadow-[0_40px_80px_-40px_rgba(11,18,54,0.35)]">
@@ -211,8 +244,12 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
                   </div>
                 </>
               ) : (
-                <div key={current.id} className="tab-in">
-                  <SectionBlock s={current} spicy={m.spicy} />
+                <div className="space-y-20 lg:space-y-24">
+                  {menu.sections.map((s) => (
+                    <div key={s.id} id={`menu-${s.id}`}>
+                      <SectionBlock s={s} spicy={m.spicy} />
+                    </div>
+                  ))}
                 </div>
               )}
 
