@@ -13,6 +13,8 @@ type Tile = { kind: "photo" | "video"; name: string; altKey: string; group: Grou
 /**
  * Even 3:4 grid mixing photos and clips. The order below is the "All" view
  * (food, dining room and terrace interleaved); the filter chips show one group.
+ * Every shot appears once on the page: anything used in Food (duck curry, steak, prawns,
+ * the vegetable hot pan — also in the "sizzling" clip) is deliberately left out here.
  */
 const TILES: Tile[] = [
   { kind: "photo", name: "terrace-umbrellas", altKey: "terraceUmbrellas", group: "terrace" },
@@ -26,19 +28,19 @@ const TILES: Tile[] = [
   { kind: "video", name: "guests-bun", altKey: "videoInside", group: "inside" },
 
   { kind: "photo", name: "guests-dining", altKey: "guestsDining", group: "inside" },
-  { kind: "video", name: "prawns", altKey: "videoDish", group: "kitchen" },
+  { kind: "video", name: "duck-sizzling", altKey: "videoDuckSizzling", group: "kitchen" },
   { kind: "video", name: "dining-room", altKey: "videoInside", group: "inside" },
   { kind: "photo", name: "terrace-group", altKey: "terraceGroup", group: "terrace" },
 
-  { kind: "video", name: "sizzling", altKey: "videoDish", group: "kitchen" },
+  { kind: "video", name: "bun-bowls", altKey: "videoDish", group: "kitchen" },
   { kind: "video", name: "terrace-guests", altKey: "videoTerrace", group: "terrace" },
   { kind: "photo", name: "guests-table", altKey: "guestsTable", group: "inside" },
-  { kind: "video", name: "bun-bowls", altKey: "videoDish", group: "kitchen" },
-
   { kind: "video", name: "steak", altKey: "videoDish", group: "kitchen" },
+
+  { kind: "photo", name: "terrace-view", altKey: "terraceView", group: "terrace" },
   { kind: "video", name: "interior-walk", altKey: "videoInside", group: "inside" },
-  { kind: "video", name: "duck-curry", altKey: "videoDish", group: "kitchen" },
   { kind: "video", name: "pho", altKey: "videoDish", group: "kitchen" },
+  { kind: "photo", name: "guests-sizzling", altKey: "guestsSizzling", group: "inside" },
 ];
 
 /** Tiles shown in the "All" view before "Show more" (3 rows on desktop). */

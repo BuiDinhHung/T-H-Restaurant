@@ -3,12 +3,15 @@ import Img from "./Img";
 import { clip } from "@/lib/media";
 import type { Dict } from "@/lib/i18n";
 
-/** Each tile opens the matching menu section (ids s1…s9 in menu-data.json). */
+/**
+ * Each tile opens the matching menu section (ids s1…s9 in menu-data.json).
+ * Keep these shots out of the Gallery so the same picture never shows twice on the page.
+ */
 const TILES = [
-  { kind: "photo", name: "dish-duck-curry", section: "s5" },
-  { kind: "still", name: "sizzling-alt", section: "s7" },
-  { kind: "still", name: "pho", section: "s8" },
-  { kind: "still", name: "prawns", section: "s2" },
+  { kind: "photo", name: "dish-duck-curry", section: "s5", altKey: "dish" },
+  { kind: "still", name: "sizzling-alt", section: "s7", altKey: "still" },
+  { kind: "photo", name: "dish-steak", section: "s6", altKey: "dishSteak" },
+  { kind: "still", name: "prawns", section: "s2", altKey: "dishPrawns" },
 ] as const;
 
 export default function Food({ dict }: { dict: Dict }) {
@@ -35,12 +38,12 @@ export default function Food({ dict }: { dict: Dict }) {
             <a key={t.name} href={`#menu-${t.section}`} className="reveal group block" style={{ ["--d" as string]: `${i * 90}ms` }}>
               <div className="lift reveal-img img-zoom aspect-[3/4] overflow-hidden rounded-md bg-navy-800" style={{ ["--d" as string]: `${i * 110}ms` }}>
                 {t.kind === "photo" ? (
-                  <Img name={t.name} alt={dict.alt.dish} sizes="(min-width:1024px) 24vw, 50vw" className="h-full w-full object-cover" />
+                  <Img name={t.name} alt={dict.alt[t.altKey]} sizes="(min-width:1024px) 24vw, 50vw" className="h-full w-full object-cover" />
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={clip(t.name).still}
-                    alt={dict.alt.still}
+                    alt={dict.alt[t.altKey]}
                     width={576}
                     height={1024}
                     loading="lazy"
