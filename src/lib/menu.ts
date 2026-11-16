@@ -1,9 +1,3 @@
-/**
- * Full menus, transcribed 1:1 from the printed PDFs
- * ("BẢN CHUẨN ĐỨC - VIỆT T&H ruột menu a4.pdf" and "SÉC - VIỆT T&H ruột menu a4.pdf").
- * Data lives in menu-data.json. Names, Vietnamese lines and prices are exactly as printed;
- * edit the JSON when the printed menu changes.
- */
 import { withBase } from "@/lib/base";
 import data from "./menu-data.json";
 

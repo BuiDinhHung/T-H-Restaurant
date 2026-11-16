@@ -10,12 +10,6 @@ import type { Dict } from "@/lib/i18n";
 type Group = "kitchen" | "inside" | "terrace";
 type Tile = { kind: "photo" | "video"; name: string; altKey: string; group: Group };
 
-/**
- * Even 3:4 grid mixing photos and clips. The order below is the "All" view
- * (food, dining room and terrace interleaved); the filter chips show one group.
- * Every shot appears once on the page: anything used in Food (duck curry, steak, prawns,
- * the vegetable hot pan — also in the "sizzling" clip) is deliberately left out here.
- */
 const TILES: Tile[] = [
   { kind: "photo", name: "terrace-umbrellas", altKey: "terraceUmbrellas", group: "terrace" },
   { kind: "video", name: "dining-full", altKey: "videoInside", group: "inside" },
@@ -43,7 +37,6 @@ const TILES: Tile[] = [
   { kind: "photo", name: "guests-sizzling", altKey: "guestsSizzling", group: "inside" },
 ];
 
-/** Tiles shown in the "All" view before "Show more" (3 rows on desktop). */
 const INITIAL = 12;
 
 export default function Gallery({ dict }: { dict: Dict }) {

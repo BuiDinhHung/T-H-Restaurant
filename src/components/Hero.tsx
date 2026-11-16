@@ -5,7 +5,6 @@ import { withBase } from "@/lib/base";
 import { business } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
 
-/** Splits a word into letters that flip in one after another. */
 function Letters({ text, offset = 0 }: { text: string; offset?: number }) {
   return (
     <span className="letters" aria-label={text}>
@@ -24,7 +23,6 @@ export default function Hero({ dict }: { dict: Dict }) {
   const { hours, address } = business;
   return (
     <section id="top" className="grain relative isolate overflow-hidden bg-navy-950">
-      {/* Background: wok-fire clip (Mixkit, free licence) — slow Ken Burns zoom, slowed playback, soft blur under the navy */}
       <div className="hero-bg absolute inset-0 -z-10 overflow-hidden" aria-hidden>
         <Parallax speed={0.35} className="absolute inset-0">
           <LazyVideo

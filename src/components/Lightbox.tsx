@@ -67,7 +67,6 @@ export default function Lightbox({ items, index, onChange, closeLabel }: Props) 
             className="max-h-[84svh] max-w-full rounded-sm bg-black"
           />
         ) : (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             key={it.src}
             src={it.src}

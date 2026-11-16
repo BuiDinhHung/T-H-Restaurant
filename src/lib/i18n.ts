@@ -1,8 +1,3 @@
-/**
- * Two editions of the site, each tied to its printed menu:
- *   /de/ → Deutsch, menu Deutsch–Vietnamesisch, prices in €
- *   /cz/ → Čeština, menu Česky–vietnamsky, prices in Kč
- */
 export const LOCALES = ["de", "cz"] as const;
 export type LocaleKey = (typeof LOCALES)[number];
 
@@ -26,11 +21,11 @@ export type Dict = {
     currency: string;
     search: string;
     all: string;
-    results: string; // {n} = number of hits
+    results: string;
     empty: string;
     original: string;
     spicy: string;
-    count: string; // {n} = number of items
+    count: string;
   };
   gallery: { eyebrow: string; title: string; text: string; video: string; open: string; more: string; filters: { all: string; kitchen: string; inside: string; terrace: string } };
   visit: {

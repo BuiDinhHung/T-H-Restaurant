@@ -15,10 +15,8 @@ export default function Visit({ dict }: { dict: Dict }) {
         <h2 className="display reveal mt-6 text-[clamp(2.6rem,6vw,4.8rem)] text-navy-900">{v.title}</h2>
 
         <div className="mt-14 grid gap-6 lg:mt-20 lg:grid-cols-12 lg:gap-8">
-          {/* Left: location card */}
           <div className="reveal lg:col-span-5">
             <article className="flex h-full flex-col overflow-hidden border border-gold-700/30 bg-white/50">
-              {/* Short clip: car park and the entrance under the T&H sign — what guests see on arrival */}
               <div className="relative aspect-[4/3] overflow-hidden bg-navy-900">
                 <LazyVideo src={clip("exterior").src} poster={clip("exterior").still} label={dict.alt.videoExterior} className="h-full w-full object-cover object-[50%_40%]" />
               </div>
@@ -47,7 +45,6 @@ export default function Visit({ dict }: { dict: Dict }) {
             </article>
           </div>
 
-          {/* Right: compact map, then opening hours & contact */}
           <div className="reveal flex flex-col gap-6 lg:col-span-7 lg:gap-8" style={{ ["--d" as string]: "120ms" }}>
             <div className="h-[280px] overflow-hidden border border-gold-700/30 sm:h-[320px] lg:h-auto lg:min-h-[300px] lg:flex-1">
               <iframe

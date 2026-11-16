@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 
-/** Desktop only (phones have the bottom action bar). */
 export default function BackToTop({ label }: { label: string }) {
   const [show, setShow] = useState(false);
   useEffect(() => {

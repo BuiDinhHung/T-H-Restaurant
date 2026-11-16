@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
 
-/** Moves its content at a different speed while scrolling and (optionally) fades it out. */
 export default function Parallax({ children, speed = 0.3, fade = false, className }: { children: React.ReactNode; speed?: number; fade?: boolean; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {

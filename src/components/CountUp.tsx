@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-/** Counts a number up when it scrolls into view; any non-numeric value is shown as-is. */
 export default function CountUp({ value, duration = 1600 }: { value: string; duration?: number }) {
   const target = /^\d+$/.test(value) ? Number(value) : null;
   const [n, setN] = useState(target === null ? value : "0");

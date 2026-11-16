@@ -4,7 +4,6 @@ import { BookOpen, Navigation, Phone } from "lucide-react";
 import { business } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
 
-/** Thumb-reach action bar on phones, shown once the hero is scrolled past. */
 export default function MobileBar({ dict }: { dict: Dict }) {
   const [show, setShow] = useState(false);
   useEffect(() => {

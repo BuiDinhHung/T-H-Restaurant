@@ -8,7 +8,6 @@ export const rememberLocale = (l: LocaleKey) => {
   } catch {}
 };
 
-/** DE | CZ segmented switch. Keeps the current section (#hash) when switching. */
 export default function LangToggle({ locale, label, tone = "dark" }: { locale: LocaleKey; label: string; tone?: "dark" | "light" }) {
   return (
     <div

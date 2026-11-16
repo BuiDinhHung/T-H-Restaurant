@@ -1,4 +1,3 @@
-/** Endless band of words (two identical halves so the loop is seamless). */
 export default function Marquee({ words, tone = "gold" }: { words: string[]; tone?: "gold" | "navy" }) {
   const row = (hidden: boolean) => (
     <div className="flex shrink-0 items-center" aria-hidden={hidden || undefined}>

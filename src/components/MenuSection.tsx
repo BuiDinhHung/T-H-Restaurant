@@ -5,9 +5,7 @@ import Lightbox from "./Lightbox";
 import { menus, type MenuCategory, type MenuItem, type MenuSection as Section } from "@/lib/menu";
 import { localeConfig, type Dict, type LocaleKey } from "@/lib/i18n";
 
-/** Printed page on which each section starts (same layout in both editions). */
 const START_PAGE: Record<string, number> = { s1: 0, s2: 2, s3: 3, s4: 3, s5: 4, s6: 9, s7: 10, s8: 10, s9: 11 };
-/** Space kept above a section when jumping to it (site header + sticky menu toolbar). */
 const SCROLL_OFFSET = 230;
 
 const norm = (s: string) => s.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase();
@@ -106,7 +104,6 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
     window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET, behavior: "smooth" });
   };
 
-  // Deep links like #menu-s7 (used by the food tiles) scroll to that section of the full list
   useEffect(() => {
     const apply = () => {
       const m = window.location.hash.match(/^#menu-(s\d)$/);
@@ -118,10 +115,8 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
     apply();
     window.addEventListener("hashchange", apply);
     return () => window.removeEventListener("hashchange", apply);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menu]);
 
-  // Scroll-spy: highlight the tab of the section currently under the toolbar
   useEffect(() => {
     if (q) return;
     let raf = 0;
@@ -144,7 +139,6 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
     };
   }, [menu, q]);
 
-  // Keep the active tab visible in the horizontally scrolling tab bar
   useEffect(() => {
     const el = document.getElementById(`tab-${tab}`);
     const bar = el?.parentElement;
@@ -188,7 +182,6 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
 
         <div ref={top} className="relative mx-auto mt-12 max-w-[1180px] border border-gold-500/50 bg-ivory-50 p-1.5 shadow-[0_40px_80px_-40px_rgba(11,18,54,0.35)]">
           <div className="border border-gold-500/25">
-            {/* Toolbar: section tabs + search, sticky under the header */}
             <div className="sticky top-[72px] z-20 border-b border-gold-500/30 bg-ivory-50/95 backdrop-blur lg:top-20">
               <div className="flex flex-col gap-3 px-4 pt-4 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-6 lg:px-10">
                 <label className="relative block w-full lg:max-w-xs">

@@ -3,10 +3,6 @@ import Img from "./Img";
 import { clip } from "@/lib/media";
 import type { Dict } from "@/lib/i18n";
 
-/**
- * Each tile opens the matching menu section (ids s1…s9 in menu-data.json).
- * Keep these shots out of the Gallery so the same picture never shows twice on the page.
- */
 const TILES = [
   { kind: "photo", name: "dish-duck-curry", section: "s5", altKey: "dish" },
   { kind: "still", name: "sizzling-alt", section: "s7", altKey: "still" },
@@ -32,7 +28,6 @@ export default function Food({ dict }: { dict: Dict }) {
           </div>
         </div>
 
-        {/* Uniform 4-up grid (2-up on phones), identical ratios */}
         <div className="mt-14 grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
           {TILES.map((t, i) => (
             <a key={t.name} href={`#menu-${t.section}`} className="reveal group block" style={{ ["--d" as string]: `${i * 90}ms` }}>
@@ -40,7 +35,6 @@ export default function Food({ dict }: { dict: Dict }) {
                 {t.kind === "photo" ? (
                   <Img name={t.name} alt={dict.alt[t.altKey]} sizes="(min-width:1024px) 24vw, 50vw" className="h-full w-full object-cover" />
                 ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={clip(t.name).still}
                     alt={dict.alt[t.altKey]}

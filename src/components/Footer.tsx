@@ -12,7 +12,6 @@ export default function Footer({ locale, dict }: { locale: LocaleKey; dict: Dict
       <div className="container-lux">
         <div className="flex flex-col items-start gap-6 border-b border-white/10 pb-14 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-5">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={withBase("/media/logo-160.webp")} alt={dict.alt.logo} width={72} height={72} loading="lazy" className="size-[72px]" />
             <div>
               <p className="font-brand text-2xl font-semibold tracking-[0.1em] text-gold-300 sm:text-3xl">T&amp;H – RESTAURANT</p>

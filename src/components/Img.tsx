@@ -8,11 +8,9 @@ type Props = {
   priority?: boolean;
 };
 
-/** Responsive <img> with srcset; lazy by default, eager + high priority for above-the-fold. */
 export default function Img({ name, alt, sizes, className, priority }: Props) {
   const p = photo(name);
   return (
-    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={p.src}
       srcSet={p.srcSet}

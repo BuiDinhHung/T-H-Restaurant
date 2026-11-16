@@ -6,18 +6,11 @@ type Props = {
   poster: string;
   className?: string;
   label?: string;
-  /** Above-the-fold: start loading immediately. */
   eager?: boolean;
-  /** Playback speed (1 = normal). */
   rate?: number;
-  /** Lighter file used on phones (< 768px wide). */
   srcSmall?: string;
 };
 
-/**
- * Muted looping clip that only downloads and plays while on screen,
- * so the page never loads every video at once. Honors reduced-motion.
- */
 export default function LazyVideo({ src, poster, className, label, eager, rate = 1, srcSmall }: Props) {
   const ref = useRef<HTMLVideoElement>(null);
 

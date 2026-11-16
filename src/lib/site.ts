@@ -1,7 +1,3 @@
-/**
- * Business facts. Everything here comes from material supplied by the owner
- * (business card, menus, Google Maps link). Do not add facts that are not confirmed.
- */
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
 export const business = {

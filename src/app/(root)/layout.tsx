@@ -10,10 +10,6 @@ export const metadata: Metadata = {
   other: { google: "notranslate" },
 };
 
-/**
- * "/" has no page of its own: it forwards to the German site, or to the Czech one when the
- * visitor chose it before or uses a Czech/Slovak browser. Visitors can switch with DE | CZ.
- */
 const script = `(function(){var b='${BASE}',t='/de/';try{var s=localStorage.getItem('th-locale');if(s==='cz'||s==='de'){t='/'+s+'/'}else{var l=(navigator.language||'').toLowerCase();if(l.indexOf('cs')===0||l.indexOf('sk')===0)t='/cz/'}}catch(e){}location.replace(b+t+location.hash)})();`;
 
 export default function RootRedirectLayout({ children }: { children: React.ReactNode }) {

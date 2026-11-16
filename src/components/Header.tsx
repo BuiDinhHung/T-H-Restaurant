@@ -44,7 +44,6 @@ export default function Header({ locale, dict }: { locale: LocaleKey; dict: Dict
         <span aria-hidden className="absolute bottom-[-1px] left-0 h-[2px] w-full origin-left bg-gradient-to-r from-gold-500 via-gold-300 to-accent-soft" style={{ transform: `scaleX(${progress})` }} />
         <div className="container-lux flex h-[72px] items-center gap-3 sm:gap-6 lg:h-20">
           <a href="#top" className="flex items-center gap-3" aria-label={business.name}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={withBase("/media/logo-160.webp")} alt="" width={44} height={44} className="size-11" />
             <span className="hidden leading-none min-[400px]:block">
               <span className="block font-brand text-[15px] font-semibold tracking-[0.12em] text-gold-300">T&amp;H RESTAURANT</span>
@@ -81,7 +80,6 @@ export default function Header({ locale, dict }: { locale: LocaleKey; dict: Dict
         </div>
       </header>
 
-      {/* Mobile navigation */}
       <div
         className={`fixed inset-0 z-[60] flex flex-col bg-navy-950 transition-[opacity,visibility] duration-500 lg:hidden ${
           open ? "visible opacity-100" : "invisible opacity-0"

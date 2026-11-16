@@ -26,7 +26,6 @@ export default function About({ dict }: { dict: Dict }) {
           </dl>
         </div>
 
-        {/* Two photos side by side, equal size — no overlap */}
         <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:col-span-7">
           <figure className="reveal-img img-zoom aspect-[3/4] overflow-hidden rounded-md">
             <Img name="interior-blossom" alt={dict.alt.interior} sizes="(min-width:1024px) 28vw, 50vw" className="h-full w-full object-cover" />

@@ -1,11 +1,6 @@
 "use client";
 import { useEffect } from "react";
 
-/**
- * Adds data-shown to every .reveal / .reveal-img element the first time it enters the viewport.
- * .reveal-img starts fully clipped (clip-path), which browsers treat as "not visible", so its
- * parent is observed instead.
- */
 export default function RevealObserver() {
   useEffect(() => {
     const targets = new Map<Element, HTMLElement[]>();
