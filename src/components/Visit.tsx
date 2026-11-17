@@ -1,5 +1,7 @@
 "use client";
-import { ArrowUpRight, Clock, MapPin, MessageCircle, Navigation, Phone } from "lucide-react";
+import { ArrowUpRight, Cigarette, Clock, Dices, Fuel, MapPin, MessageCircle, Navigation, Phone, ShoppingBag, ShoppingBasket, SquareParking } from "lucide-react";
+
+const nearbyIcons = [SquareParking, ShoppingBasket, Cigarette, Fuel, Dices, ShoppingBag];
 import LazyVideo from "./LazyVideo";
 import { clip } from "@/lib/media";
 import { business } from "@/lib/site";
@@ -98,6 +100,31 @@ export default function Visit({ dict }: { dict: Dict }) {
                 </div>
               </div>
           </div>
+        </div>
+
+        <div className="reveal mt-6 border border-gold-700/30 bg-white/50 p-7 sm:p-10 lg:mt-8">
+          <div className="max-w-2xl">
+            <p className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.22em] text-gold-700 uppercase">
+              <MapPin className="size-3.5" strokeWidth={1.75} /> {dict.nearby.eyebrow}
+            </p>
+            <h3 className="mt-4 font-display text-[2rem] leading-tight font-semibold text-navy-900">{dict.nearby.title}</h3>
+            <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{dict.nearby.text}</p>
+          </div>
+          <ul className="mt-8 grid grid-cols-2 gap-px overflow-hidden border border-gold-700/20 bg-gold-700/20 sm:grid-cols-3 lg:grid-cols-6">
+            {dict.nearby.items.map(([title, note], i) => {
+              const Icon = nearbyIcons[i];
+              const featured = i === 0;
+              return (
+                <li key={title} className={`flex flex-col gap-3 p-5 sm:p-6 ${featured ? "bg-navy-900 text-gold-200" : "bg-ivory-50"}`}>
+                  <Icon className={`size-6 ${featured ? "text-gold-300" : "text-gold-700"}`} strokeWidth={1.5} />
+                  <div>
+                    <p className={`font-display text-lg leading-snug font-semibold ${featured ? "text-white" : "text-navy-900"}`}>{title}</p>
+                    <p className={`mt-1 text-xs ${featured ? "text-gold-200" : "text-ink-soft"}`}>{note}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </section>

@@ -20,6 +20,7 @@ export const restaurantJsonLd = (locale: LocaleKey) => ({
   servesCuisine: "Asian",
   hasMenu: `${SITE_URL}/${locale}/#menu`,
   hasMap: business.maps.share,
+  amenityFeature: [{ "@type": "LocationFeatureSpecification", name: "Free parking", value: true }],
   address: {
     "@type": "PostalAddress",
     streetAddress: business.address.street,

@@ -34,6 +34,7 @@ Nút **DE | CZ** trên thanh menu để chuyển qua lại. Web đã chặn trì
 ## Sửa nội dung
 - **Thông tin quán** (địa chỉ, điện thoại, giờ mở cửa, link bản đồ): `src/lib/site.ts`
 - **Thực đơn** (chép nguyên văn từ 2 file PDF, 155 món mỗi bản): `src/lib/menu-data.json`. Mỗi món: `{ no, name, sub, size, price, spice }` (`spice` = số ớt 1–3). Ảnh từng trang menu gốc: `public/menu/`.
+- **Ảnh món ăn trong menu**: `public/menu/dishes/<tên>-480.webp` và `<tên>-1200.webp` (khung 4:3, nền navy). Gắn ảnh vào món theo số món (`DISH_PHOTOS`) hoặc vào cả nhóm theo chữ cái nhóm (`CATEGORY_PHOTOS`) trong `src/lib/menu.ts`. Ảnh gốc lưu ở thư mục `../anh-mon-an-goc` (không đưa lên web).
 - **Văn bản DE / CZ**: `src/lib/i18n.ts`
 - **Màu sắc / font (design system)**: `src/app/globals.css` (khối `@theme`)
 - **Ảnh/video**: `public/media` (WebP 640/1080/1536 px), `public/video`

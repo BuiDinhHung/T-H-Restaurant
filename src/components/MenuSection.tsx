@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, Flame, Search, X } from "lucide-react";
+import { BookOpen, Camera, Flame, Search, X } from "lucide-react";
 import Lightbox from "./Lightbox";
-import { menus, type MenuCategory, type MenuItem, type MenuSection as Section } from "@/lib/menu";
+import { menus, type DishPhoto, type MenuCategory, type MenuItem, type MenuSection as Section } from "@/lib/menu";
 import { localeConfig, type Dict, type LocaleKey } from "@/lib/i18n";
 
 const START_PAGE: Record<string, number> = { s1: 0, s2: 2, s3: 3, s4: 3, s5: 4, s6: 9, s7: 10, s8: 10, s9: 11 };
@@ -21,13 +21,80 @@ function Chilies({ n, label }: { n?: number; label: string }) {
   );
 }
 
-function Row({ item, spicy }: { item: MenuItem; spicy: string }) {
+type Ctx = { spicy: string; photoLabel: string; show: (key: string) => void };
+type Shot = { key: string; photo: DishPhoto; no?: number; title: string; sub?: string; price?: string };
+
+const itemKey = (i: MenuItem) => `n${i.no}`;
+const catKey = (s: Section, c: MenuCategory) => `c${s.id}${c.letter}`;
+
+const categoryShots = (s: Section, c: MenuCategory): Shot[] => [
+  ...(c.photo ? [{ key: catKey(s, c), photo: c.photo, title: `${c.letter} ${c.title}`.trim(), sub: c.vi }] : []),
+  ...c.items.flatMap((i) => (i.photo ? [{ key: itemKey(i), photo: i.photo, no: i.no, title: i.name, sub: i.sub, price: i.price }] : [])),
+];
+const sectionShots = (s: Section): Shot[] => s.categories.flatMap((c) => categoryShots(s, c));
+
+const NARROW_COLS: Record<number, string> = { 1: "grid-cols-1", 2: "grid-cols-2", 3: "grid-cols-3", 4: "grid-cols-2" };
+const WIDE_COLS: Record<number, string> = { 1: "grid-cols-1 sm:mx-auto sm:max-w-xl", 2: "grid-cols-2", 3: "grid-cols-2 sm:grid-cols-3", 4: "grid-cols-2 lg:grid-cols-4" };
+
+function CategoryPhotos({ shots, ctx, wide }: { shots: Shot[]; ctx: Ctx; wide?: boolean }) {
+  if (!shots.length) return null;
+  const n = shots.length;
+  const cols = (wide ? WIDE_COLS : NARROW_COLS)[n] ?? (wide ? "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4" : "grid-cols-3");
+  const captions = n > 1;
   return (
-    <li className="py-3.5">
+    <ul className={`mt-4 mb-2 grid gap-3 sm:gap-4 ${cols}`}>
+      {shots.map((p) => (
+        <li key={p.key} className="min-w-0">
+          <button
+            type="button"
+            onClick={() => ctx.show(p.key)}
+            aria-label={`${ctx.photoLabel}: ${p.title}`}
+            className="group block w-full text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-500"
+          >
+            <span className={`block overflow-hidden border border-gold-500/40 bg-navy-900 ${captions ? "aspect-[4/3]" : "aspect-[16/9]"}`}>
+              <img
+                src={p.photo.thumb}
+                srcSet={p.photo.srcSet}
+                sizes={captions ? "(min-width: 1024px) 260px, 50vw" : "(min-width: 1024px) 520px, 100vw"}
+                alt=""
+                width={1200}
+                height={900}
+                loading="lazy"
+                decoding="async"
+                className={`h-full w-full transition duration-700 ease-out group-hover:scale-105 ${captions ? "object-cover" : "object-contain"}`}
+              />
+            </span>
+            {(captions || p.no !== undefined) && (
+              <span className="mt-2 line-clamp-2 min-h-[32px] text-[11px] leading-4 font-semibold tracking-[0.04em] text-navy-900 uppercase">
+                {p.no !== undefined && <span className="mr-1 text-accent tabular-nums">{p.no}.</span>}
+                {p.no !== undefined ? p.title : p.sub || p.title}
+              </span>
+            )}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function Row({ item, ctx }: { item: MenuItem; ctx: Ctx }) {
+  return (
+    <li className="break-inside-avoid py-3.5">
       <div className="flex items-baseline gap-3">
         <span className="w-8 shrink-0 text-right text-[12px] font-semibold text-accent tabular-nums">{item.no}.</span>
         <span className="min-w-0 text-[13px] leading-snug font-semibold tracking-[0.04em] text-navy-900">
-          {item.name} <Chilies n={item.spice} label={spicy} />
+          {item.name} <Chilies n={item.spice} label={ctx.spicy} />
+          {item.photo && (
+            <button
+              type="button"
+              onClick={() => ctx.show(itemKey(item))}
+              aria-label={`${ctx.photoLabel}: ${item.name}`}
+              title={ctx.photoLabel}
+              className="ml-1.5 inline-grid size-6 translate-y-[3px] place-items-center rounded-full border border-gold-500/50 text-gold-700 transition hover:bg-gold-500/15"
+            >
+              <Camera className="size-3.5" strokeWidth={1.75} />
+            </button>
+          )}
         </span>
         <span className="mx-1 hidden min-w-6 flex-1 translate-y-[-3px] border-b border-dotted border-navy-900/25 sm:block" aria-hidden />
         <span className="ml-auto shrink-0 text-right text-[13px] font-semibold whitespace-nowrap text-gold-700 tabular-nums sm:ml-0">{item.price}</span>
@@ -42,7 +109,7 @@ function Row({ item, spicy }: { item: MenuItem; spicy: string }) {
   );
 }
 
-function Category({ c, spicy }: { c: MenuCategory; spicy: string }) {
+function Category({ c, ctx, split, shots = [] }: { c: MenuCategory; ctx: Ctx; split?: boolean; shots?: Shot[] }) {
   return (
     <div className="break-inside-avoid">
       {(c.title || c.letter) && (
@@ -57,16 +124,18 @@ function Category({ c, spicy }: { c: MenuCategory; spicy: string }) {
           {c.note.text} · <span className="font-display text-[14px] font-normal tracking-normal normal-case italic">{c.note.vi}</span>
         </p>
       )}
-      <ul className="divide-y divide-navy-900/8">
+      <CategoryPhotos shots={shots} ctx={ctx} wide={split} />
+      <ul className={split ? "gap-x-16 lg:columns-2 [&>li]:border-b [&>li]:border-navy-900/8" : "divide-y divide-navy-900/8"}>
         {c.items.map((i) => (
-          <Row key={i.no} item={i} spicy={spicy} />
+          <Row key={i.no} item={i} ctx={ctx} />
         ))}
       </ul>
     </div>
   );
 }
 
-function SectionBlock({ s, spicy, heading = true }: { s: Section; spicy: string; heading?: boolean }) {
+function SectionBlock({ s, ctx, heading = true }: { s: Section; ctx: Ctx; heading?: boolean }) {
+  const single = s.categories.length === 1;
   return (
     <div>
       {heading && (
@@ -80,11 +149,17 @@ function SectionBlock({ s, spicy, heading = true }: { s: Section; spicy: string;
           </div>
         </div>
       )}
-      <div className="mt-10 gap-x-16 space-y-10 lg:columns-2 lg:space-y-0 [&>*]:lg:mb-10">
-        {s.categories.map((c, i) => (
-          <Category key={i} c={c} spicy={spicy} />
-        ))}
-      </div>
+      {single ? (
+        <div className="mt-10">
+          <Category c={s.categories[0]} ctx={ctx} split shots={categoryShots(s, s.categories[0])} />
+        </div>
+      ) : (
+        <div className="mt-10 gap-x-16 space-y-10 lg:columns-2 lg:space-y-0 [&>*]:lg:mb-10">
+          {s.categories.map((c, i) => (
+            <Category key={i} c={c} ctx={ctx} shots={categoryShots(s, c)} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -95,6 +170,7 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
   const [tab, setTab] = useState(menu.sections[0].id);
   const [q, setQ] = useState("");
   const [viewer, setViewer] = useState<number | null>(null);
+  const [dish, setDish] = useState<number | null>(null);
   const top = useRef<HTMLDivElement>(null);
 
   const jump = (id: string) => {
@@ -164,6 +240,8 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
       }))
       .filter((s) => s.categories.length);
   }, [q, menu]);
+  const photos = useMemo(() => menu.sections.flatMap(sectionShots), [menu]);
+  const ctx: Ctx = { spicy: m.spicy, photoLabel: m.photo, show: (key) => setDish(Math.max(0, photos.findIndex((p) => p.key === key))) };
   const count = results?.reduce((a, s) => a + s.categories.reduce((b, c) => b + c.items.length, 0), 0) ?? 0;
   const current = menu.sections.find((s) => s.id === tab) ?? menu.sections[0];
   const total = menu.sections.reduce((a, s) => a + s.categories.reduce((b, c) => b + c.items.length, 0), 0);
@@ -232,7 +310,7 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
                   {results.length === 0 && <p className="py-16 text-center font-display text-xl text-ink-soft italic">{m.empty}</p>}
                   <div className="space-y-12">
                     {results.map((s) => (
-                      <SectionBlock key={s.id} s={s} spicy={m.spicy} />
+                      <SectionBlock key={s.id} s={s} ctx={ctx} />
                     ))}
                   </div>
                 </>
@@ -240,7 +318,7 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
                 <div className="space-y-20 lg:space-y-24">
                   {menu.sections.map((s) => (
                     <div key={s.id} id={`menu-${s.id}`}>
-                      <SectionBlock s={s} spicy={m.spicy} />
+                      <SectionBlock s={s} ctx={ctx} />
                     </div>
                   ))}
                 </div>
@@ -266,6 +344,12 @@ export default function MenuSection({ locale, dict }: { locale: LocaleKey; dict:
         items={menu.pages.map((src, i) => ({ type: "image" as const, src, alt: `${m.original} – ${dict.menu.edition}` }))}
         index={viewer}
         onChange={setViewer}
+        closeLabel={dict.nav.close}
+      />
+      <Lightbox
+        items={photos.map((p) => ({ type: "image" as const, src: p.photo.src, srcSet: p.photo.srcSet, alt: [p.no !== undefined ? `${p.no}. ${p.title}` : p.title, p.price].filter(Boolean).join(" · ") }))}
+        index={dish}
+        onChange={setDish}
         closeLabel={dict.nav.close}
       />
     </section>

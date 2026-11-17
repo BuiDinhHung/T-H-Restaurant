@@ -26,6 +26,7 @@ export type Dict = {
     original: string;
     spicy: string;
     count: string;
+    photo: string;
   };
   gallery: { eyebrow: string; title: string; text: string; video: string; open: string; more: string; filters: { all: string; kitchen: string; inside: string; terrace: string } };
   visit: {
@@ -45,6 +46,7 @@ export type Dict = {
     contactTitle: string;
     call: string;
   };
+  nearby: { eyebrow: string; title: string; text: string; items: [string, string][] };
   footer: { about: string; explore: string; visit: string; language: string; rights: string };
   mobile: { call: string; menu: string; route: string };
   alt: Record<string, string>;
@@ -90,6 +92,7 @@ const de: Dict = {
     original: "Original-Speisekarte",
     spicy: "Scharf",
     count: "{n} Gerichte & Getränke · Nr. 1–{n}",
+    photo: "Foto ansehen",
   },
   gallery: {
     eyebrow: "Einblicke",
@@ -116,6 +119,19 @@ const de: Dict = {
     daily: "Täglich geöffnet – ohne Ruhetag",
     contactTitle: "Kontakt & Reservierung",
     call: "Anrufen",
+  },
+  nearby: {
+    eyebrow: "Rund um das Restaurant",
+    title: "Alles direkt nebenan",
+    text: "Essen, parken, einkaufen – an der Grenze in Folmava liegt alles nur ein paar Schritte entfernt.",
+    items: [
+      ["Großer Parkplatz", "Tag und Nacht – kostenlos"],
+      ["Markt", "Direkt in der Nähe"],
+      ["Tabak & Spirituosen", "Geschäfte nebenan"],
+      ["Tankstelle", "Gleich um die Ecke"],
+      ["Casino", "In der Nähe"],
+      ["Freizeit & Shopping", "Unterhaltung und Einkauf"],
+    ],
   },
   footer: { about: "Asiatische Küche direkt an der deutsch-tschechischen Grenze. Täglich geöffnet.", explore: "Entdecken", visit: "Besuch", language: "Sprache", rights: "Alle Rechte vorbehalten." },
   mobile: { call: "Anrufen", menu: "Karte", route: "Route" },
@@ -185,6 +201,7 @@ const cs: Dict = {
     original: "Originální lístek",
     spicy: "Pálivé",
     count: "{n} jídel a nápojů · č. 1–{n}",
+    photo: "Zobrazit foto",
   },
   gallery: {
     eyebrow: "Nahlédněte k nám",
@@ -211,6 +228,19 @@ const cs: Dict = {
     daily: "Otevřeno denně – bez zavíracího dne",
     contactTitle: "Kontakt a rezervace",
     call: "Zavolat",
+  },
+  nearby: {
+    eyebrow: "V okolí restaurace",
+    title: "Vše hned vedle",
+    text: "Jídlo, parkování, nákupy – na hranici ve Folmavě máte vše jen pár kroků od sebe.",
+    items: [
+      ["Velké parkoviště", "Ve dne i v noci – zdarma"],
+      ["Tržnice", "Hned v blízkosti"],
+      ["Tabák a alkohol", "Obchody vedle"],
+      ["Čerpací stanice", "Hned za rohem"],
+      ["Kasino", "V blízkosti"],
+      ["Zábava a nákupy", "Zábava i nakupování"],
+    ],
   },
   footer: { about: "Asijská kuchyně přímo na česko-německé hranici. Otevřeno denně.", explore: "Prozkoumat", visit: "Návštěva", language: "Jazyk", rights: "Všechna práva vyhrazena." },
   mobile: { call: "Volat", menu: "Lístek", route: "Trasa" },
